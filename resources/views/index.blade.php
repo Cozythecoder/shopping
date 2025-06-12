@@ -14,26 +14,36 @@ Shopping
     </div>
 </div>
 <script>
-fetch("https://fakestoreapi.com/products")
-    .then(res => res.json())
-    .then(products => {
-        const container = document.getElementById('products-list');
-        container.innerHTML = products.map(product => `
-            <div class="bg-white shadow-md rounded-lg p-4">
-                <img src="${product.image}" 
-                     alt="${product.title}" 
-                     class="w-full h-48 object-cover rounded-t-lg mb-4"
-                    
-                <h2 class="text-xl font-semibold mb-2">${product.title}</h2>
-                <p class="text-gray-600 mb-2">${product.description}</p>
-                <ul class="text-sm text-gray-700 mb-2">
-                    <li><strong>ID:</strong> ${product.id}</li>
-                    <li><strong>Category:</strong> ${product.category && product.category.name ? product.category.name : '-'}</li>
-                </ul>
-                <p class="text-lg font-bold mt-2">$${Number(product.price).toFixed(2)}</p>
-                <a href="#" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">View Details</a>
-            </div>
-        `).join('');
-    });
+    fetch("/product/json")
+        .then(res => res.json())
+        .then(products => {
+            const activeProducts = products.filter(product => product.is_active);
+            const container = document.getElementById('products-list');
+            if (activeProducts.length === 0) {
+                container.innerHTML = '<p class="text-white text-center">No active products available.</p>';
+                return;
+            }
+            container.innerHTML = '';
+            activeProducts.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.className = 'bg-gray-800 shadow-md rounded-lg p-4';
+                productElement.innerHTML = `
+        <img src="${product.image}" 
+             alt="${product.title}" 
+             class="w-full h-48 object-cover rounded-t-lg mb-4"
+        />
+        <h2 class="text-white text-lg font-bold mb-2">${product.name}</h2>
+        <p class="text-white text-sm text-gray-700 mb-2">
+            <strong>Description:</strong> ${product.description}
+        </p>
+        <ul class="text-white text-sm text-gray-700 mb-2">
+            <li><strong>Category:</strong> ${product.category && product.category.name ? product.category.name : '-'}</li>
+        </ul>
+        <p class="text-white text-lg font-bold mt-2">$${Number(product.price).toFixed(2)}</p>
+        <a href="#" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">View Details</a>
+                `;
+                container.appendChild(productElement);
+            });
+        });
 </script>
 @endsection

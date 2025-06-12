@@ -1,5 +1,4 @@
 <div class="container">
-    <h2>Create Product</h2>
     <form action="{{ route('product.store') }}" enctype="multipart/form-data" method="POST">
         @csrf
         <div class="mb-3">
@@ -15,7 +14,6 @@
             <input type="number" name="stock" class="form-control" id="stock" min="0" required>
             <label for="is_active" class="form-label">Is Active</label>
             <input type="checkbox" name="is_active" class="form-check-input" id="is_active" value="1">
-
         </div>
         <button type="submit" class="btn btn-primary">Create</button>
     </form>

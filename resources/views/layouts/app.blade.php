@@ -13,7 +13,19 @@
         body .container h1 {
             color: #ffffff;
         }
-        
+
+        .nav-link,
+        .navbar-nav .nav-link.active,
+        .navbar-nav .nav-link.show {
+            border-bottom: none !important;
+            text-decoration: none !important;
+            box-shadow: none !important;
+        }
+        a {
+            text-decoration: none !important;
+            border-bottom: none !important;
+            box-shadow: none !important;
+        }
     </style>
   </head>
 <body>
@@ -54,11 +66,9 @@
                class="rounded-md px-3 py-2 text-sm font-medium 
                {{ Request::is('/') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}" 
                aria-current="page">Home</a>
-            <a href="/dashboard" 
-               class="rounded-md px-3 py-2 text-sm font-medium 
-               {{ Request::is('dashboard') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
-               Dashboard</a>
             <a href="#" 
+               class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Hot Product</a>
+            <a href="{{ route('about.index') }}" 
                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">About</a>
             <a href="#" 
                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Contact</a>
@@ -85,6 +95,7 @@
           </div>
           <div id="profile-menu" class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-hidden hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
             <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
+            <a href="/dashboard" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Admin Dashboard</a>
             <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
             <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
           </div>

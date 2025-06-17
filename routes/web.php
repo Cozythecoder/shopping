@@ -5,6 +5,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CategoryController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
@@ -19,4 +21,6 @@ route::get('/product/json', [ProductController::class, 'json'])->name('product.j
 route::post( '/product/{id}/toggle-active', [ProductController::class,'toggleActive'])->name('product.toggleActive');
 
 route::get('/about', [AboutController::class,'index'])->name('about.index');
-
+route::get('/contact', [ContactController::class,'index'])->name('contact.index');
+route::get('/category', [CategoryController::class,'index'])->name('category.index');
+route::post('/category' , [CategoryController::class,'store'])->name('category.store');

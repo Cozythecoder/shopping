@@ -12,7 +12,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $data['products'] = DB::table("products")->get();
+        $data['products'] = DB::table("products")
+            ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->select('products.*', 'categories.name as category_name')
+            ->get();
+        $data['categories'] = DB::table("categories")->get();
         return view('products.index', $data);
     }
 
@@ -32,13 +36,13 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('uploads/products', 'public');
-            $validated['image'] = $imagePath;
         }
 
         $data = [
             'name' => $request->name,
             'price' => $request->price,
             'description' => $request->description,
+            'category_id' => $request->category_id,
             'created_at' => now(),
             'updated_at' => now(),
             'image' => $imagePath,
@@ -46,11 +50,21 @@ class ProductController extends Controller
             'stock' => $request->stock,
         ];
 
-        $product = DB::table('products')->insert($data);
-        if ($product) {
-            return redirect()->route('product.index')->with('success', 'Product created successfully');
+        $inserted = DB::table('products')->insert($data);
+
+        if ($inserted) {
+            // Return newly created product or all products
+            $products = DB::table('products')->get(); // or just return $data
+            return response()->json([
+                'success' => true,
+                'message' => 'Product created successfully',
+                'products' => $products
+            ]);
         } else {
-            return redirect()->back()->with('error', 'Failed to create product');
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create product'
+            ], 500);
         }
     }
 
@@ -102,10 +116,14 @@ class ProductController extends Controller
 
     public function json()
     {
-        $products = DB::table('products')->get()->map(function ($product) {
-            $product->image = asset('storage/' . $product->image);
-            return $product;
-        });
+        $products = DB::table('products')
+            ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->select('products.*', 'categories.name as category_name')
+            ->get()
+            ->map(function ($product) {
+                $product->image = asset('storage/' . $product->image);
+                return $product;
+            });
         return response()->json($products);
     }
 
